@@ -7,8 +7,8 @@ import Header from "../components/header/Header";
 const TodoList = () => {
   const [todoList, setTodoList] = useState([
     //추가 버튼 눌렀을 때 저장 값 설정
-    { id: 1, title: "물먹기", content: "물먹기2", done: "false" }, //useState 객체로 설정
-    { id: 2, title: "밥먹기", content: "밥먹기2", done: "false" },
+    { id: 1, title: "물먹기", content: "물먹기2", done: false }, //useState 객체로 설정
+    { id: 2, title: "밥먹기", content: "밥먹기2", done: true },
   ]);
 
   return (

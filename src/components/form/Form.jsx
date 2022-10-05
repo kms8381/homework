@@ -52,8 +52,9 @@ const Form = ({ todoList, setTodoList }) => {
           onChange={onChangeContent}
           value={todoContent}
         />
-        <button className="button">추가하기</button>
       </div>
+      <button className="button">추가하기</button>
+
       {/* <List todoList={todoList} /> / List라는 이름을 가진 파일에
       todoList라는 이름으로 todoList(리스트 값)을 보내준다. */}
     </form>
