@@ -1,64 +1,78 @@
 import React, { useState } from "react";
-import "./style.css";
-let num = 3;
+import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+import { addTodo } from "../../redux/store/store.js";
 
-const Form = ({ todoList, setTodoList }) => {
-  const [todoTitle, setTodoTitle] = useState(""); //제목값 state 설정
-
-  const [todoContent, setTodoContent] = useState(""); //내용에 들어가는 값 설정
-
-  const onChangeTitle = (e) => {
-    //제목에 새로운 값이 입력 될 때 마다
-    const changTitle = e.target.value; //그 값을 changTitle라는 변수에 저장하고
-    setTodoTitle(changTitle); //TodoTitle에 changTitle를 추가 시킨다.
+const Form = () => {
+  const dispatch = useDispatch();
+  const todos = useSelector((state) => state.todos.todos);
+  const initialState = {
+    id: 1,
+    title: "",
+    content: "",
+    done: false,
   };
+  const [todo, setTodo] = useState(initialState);
 
-  const onChangeContent = (e) => {
-    // 내용에 새로운 값이 입력 될 때 마다
-    const changContent = e.target.value; //그 값을 changContent 라는 변수에 저장하고
-    setTodoContent(changContent); //TodoContent에 changContent를 추가 시킨다.
+  const onChangeTodo = (e) => {
+    const { name, value } = e.target;
+    setTodo({ ...todo, [name]: value });
   };
 
   const onSubmit = (e) => {
-    //버튼을 누를 때 마다
-    e.preventDefault(); //창이 새로고침 되면서 데이터가 날라가는걸 방지(새로고침 막아줌)
-    const newTodo = {
-      id: num,
-      title: todoTitle,
-      content: todoContent,
-      done: false,
-    };
-    setTodoTitle("");
-    setTodoContent("");
-    //newTodo라는 변수에 객체를 저장한다.
-    setTodoList([newTodo, ...todoList]); //기존에 저장 돼 있던 todoList에 nuwTodo를 추가한다.
-    num = num + 1;
+    e.preventDefault();
+    dispatch(addTodo({ ...todo, id: todos.at(-1).id + 1 }));
+    setTodo(initialState);
   };
 
   return (
-    <form onSubmit={onSubmit} className="add-form">
-      <div className="input-group">
+    <AddForm onSubmit={onSubmit}>
+      <InputGroup>
         <label>제목</label>
-        <input
-          type="text"
-          className="text"
-          onChange={onChangeTitle}
-          value={todoTitle}
-        />
+        <Text name="title" onChange={onChangeTodo} value={todo.title} />
         <label>내용</label>
-        <input
-          type="text"
-          className="text"
-          onChange={onChangeContent}
-          value={todoContent}
-        />
-      </div>
-      <button className="button">추가하기</button>
-
-      {/* <List todoList={todoList} /> / List라는 이름을 가진 파일에
-      todoList라는 이름으로 todoList(리스트 값)을 보내준다. */}
-    </form>
+        <Text name="content" onChange={onChangeTodo} value={todo.content} />
+      </InputGroup>
+      <Button>추가하기</Button>
+    </AddForm>
   );
 };
 
 export default Form;
+
+const AddForm = styled.form`
+  background-color: #eee;
+  border-radius: 12px;
+  justify-content: space-between;
+  padding: 30px;
+  align-items: center;
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  height: 100px;
+`;
+
+const InputGroup = styled.div`
+  align-items: center;
+  display: flex;
+  gap: 20px;
+`;
+const Text = styled.input`
+  border: none;
+  border-radius: 12px;
+  height: 40px;
+  padding: 0 12px;
+  width: 240px;
+`;
+
+const Button = styled.button`
+  background-color: rgb(111, 228, 172);
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 700;
+  height: 40px;
+  width: 140px;
+  margin-left: 70px;
+  margin-right: 20px;
+`;
